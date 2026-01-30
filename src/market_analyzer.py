@@ -261,7 +261,7 @@ class MarketAnalyzer:
             logger.info("[大盘] 获取市场涨跌统计...")
             
             # 获取全部A股实时行情
-            df = self._call_akshare_with_retry(ak.stock_zh_a_spot, "A股实时行情", attempts=2)
+            df = self._call_akshare_with_retry(ak.stock_zh_a_spot_em, "A股实时行情", attempts=2)
             
             if df is not None and not df.empty:
                 # 涨跌统计
@@ -295,7 +295,7 @@ class MarketAnalyzer:
             logger.info("[大盘] 获取板块涨跌榜...")
             
             # 获取行业板块行情
-            df = self._call_akshare_with_retry(ak.stock_board_industry_summary_ths, "行业板块行情", attempts=2)
+            df = self._call_akshare_with_retry(ak.stock_board_industry_name_em, "行业板块行情", attempts=2)
             
             if df is not None and not df.empty:
                 change_col = '涨跌幅'
@@ -306,14 +306,14 @@ class MarketAnalyzer:
                     # 涨幅前5
                     top = df.nlargest(5, change_col)
                     overview.top_sectors = [
-                        {'name': row['板块'], 'change_pct': row[change_col]}
+                        {'name': row['板块名称'], 'change_pct': row[change_col]}
                         for _, row in top.iterrows()
                     ]
                     
                     # 跌幅前5
                     bottom = df.nsmallest(5, change_col)
                     overview.bottom_sectors = [
-                        {'name': row['板块'], 'change_pct': row[change_col]}
+                        {'name': row['板块名称'], 'change_pct': row[change_col]}
                         for _, row in bottom.iterrows()
                     ]
                     
