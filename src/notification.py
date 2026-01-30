@@ -20,7 +20,7 @@ import json
 import smtplib
 import re
 import markdown2
-from datetime import datetime
+from datetime import datetime,timedelta,timezone
 from typing import List, Dict, Any, Optional
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -39,6 +39,10 @@ from src.analyzer import AnalysisResult
 from bot.models import BotMessage
 
 logger = logging.getLogger(__name__)
+
+
+def _now_cn() -> datetime:
+    return datetime.now(timezone(timedelta(hours=8)))
 
 
 class NotificationChannel(Enum):
@@ -327,13 +331,13 @@ class NotificationService:
             Markdown 格式的日报内容
         """
         if report_date is None:
-            report_date = datetime.now().strftime('%Y-%m-%d')
+            report_date = _now_cn().strftime('%Y-%m-%d')
 
         # 标题
         report_lines = [
             f"# 📅 {report_date} 股票智能分析报告",
             "",
-            f"> 共分析 **{len(results)}** 只股票 | 报告生成时间：{datetime.now().strftime('%H:%M:%S')}",
+            f"> 共分析 **{len(results)}** 只股票 | 报告生成时间：{_now_cn().strftime('%H:%M:%S')}",
             "",
             "---",
             "",
@@ -499,7 +503,7 @@ class NotificationService:
         # 底部信息（去除免责声明）
         report_lines.extend([
             "",
-            f"*报告生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*",
+            f"*报告生成时间：{_now_cn().strftime('%Y-%m-%d %H:%M:%S')}*",
         ])
         
         return "\n".join(report_lines)
@@ -806,7 +810,7 @@ class NotificationService:
         # 底部（去除免责声明）
         report_lines.extend([
             "",
-            f"*报告生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*",
+            f"*报告生成时间：{_now_cn().strftime('%Y-%m-%d %H:%M:%S')}*",
         ])
         
         return "\n".join(report_lines)
