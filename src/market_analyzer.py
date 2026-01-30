@@ -358,12 +358,14 @@ class MarketAnalyzer:
         all_news = []
         today = datetime.now()
         month_str = f"{today.year}年{today.month}月"
+        day_str = f"{today.year}年{today.month}月{today.day}日"
         
         # 多维度搜索
         search_queries = [
-            f"A股 大盘 复盘 {month_str}",
-            f"股市 行情 分析 今日 {month_str}",
-            f"A股 市场 热点 板块 {month_str}",
+            f"A股 大盘 复盘 {day_str}",
+            f"股市 行情 分析 今日 {day_str}",
+            f"A股 市场 热点 板块 {day_str}",
+            f"A股 市场 活跃市值 增量资金  {day_str}",
         ]
         
         try:
@@ -461,7 +463,7 @@ class MarketAnalyzer:
                 snippet = n.get('snippet', '')[:100]
             news_text += f"{i}. {title}\n   {snippet}\n"
         
-        prompt = f"""你是一位专业的A股市场分析师，请根据以下数据生成一份简洁的大盘复盘报告。
+        prompt = f"""你是一位专业的A股市场分析师，请根据以下数据生成一份简洁的大盘复盘报告，重点关注活跃市值和增量资金的变化。活跃市值是指市场中正在积极参与交易的资金规模，通常用于监测股市中的活跃资金流动和市场趋势，增量资金是指在资本市场中新增的资金，主要来源于储蓄、保险资金、养老基金等渠道，对市场活跃度和成交量有直接影响。。
 
 【重要】输出要求：
 - 必须输出纯 Markdown 文本格式
@@ -513,7 +515,7 @@ class MarketAnalyzer:
 （分析领涨领跌板块背后的逻辑和驱动因素）
 
 ### 五、后市展望
-（结合当前走势和新闻，给出明日市场预判）
+（结合当前走势和活跃市值和增量资金变化的信息以及新闻，给出明日市场预判）
 
 ### 六、风险提示
 （需要关注的风险点）
